@@ -37,5 +37,12 @@ namespace KmK_Movie_Ticket_Reservation
             auditoriumsAdmin.ShowDialog();
             this.Close();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SeatsAdmin seatsAdmin = new SeatsAdmin();
+            seatsAdmin.ShowDialog();
+            this.Close();
+        }
     }
 }
