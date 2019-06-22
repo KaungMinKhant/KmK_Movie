@@ -44,5 +44,12 @@ namespace KmK_Movie_Ticket_Reservation
             seatsAdmin.ShowDialog();
             this.Close();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ScreeningsAdmin screeningsAdmin = new ScreeningsAdmin();
+            screeningsAdmin.ShowDialog();
+            this.Close();
+        }
     }
 }

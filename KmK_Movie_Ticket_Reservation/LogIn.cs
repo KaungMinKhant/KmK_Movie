@@ -46,7 +46,9 @@ namespace KmK_Movie_Ticket_Reservation
             {
                 if(IsStaff(name, pass))
                 {
-                    MessageBox.Show($"{name} is staff");
+                    ChooseMovie chooseMovie = new ChooseMovie(name);
+                    chooseMovie.ShowDialog();
+                    this.Close();
                 }
                 else if(IsManager(name, pass))
                 {
