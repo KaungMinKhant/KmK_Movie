@@ -30,5 +30,12 @@ namespace KmK_Movie_Ticket_Reservation
             movieAdmin.ShowDialog();
             this.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            AuditoriumsAdmin auditoriumsAdmin = new AuditoriumsAdmin();
+            auditoriumsAdmin.ShowDialog();
+            this.Close();
+        }
     }
 }
