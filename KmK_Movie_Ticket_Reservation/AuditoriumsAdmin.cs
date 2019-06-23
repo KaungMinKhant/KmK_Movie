@@ -106,7 +106,7 @@ namespace KmK_Movie_Ticket_Reservation
         public void Show_Table()
         {
             String query = "SELECT * FROM auditoriums";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
+            MySqlCommand cmd = new MySqlCommand(query, conn);            
             try
             {
                 MySqlDataAdapter sda = new MySqlDataAdapter();

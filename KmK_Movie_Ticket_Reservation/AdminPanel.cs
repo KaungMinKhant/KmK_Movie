@@ -51,5 +51,12 @@ namespace KmK_Movie_Ticket_Reservation
             screeningsAdmin.ShowDialog();
             this.Close();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ReservationLog reservationLog = new ReservationLog();
+            reservationLog.ShowDialog();
+            this.Close();
+        }
     }
 }

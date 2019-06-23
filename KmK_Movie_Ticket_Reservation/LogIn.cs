@@ -34,6 +34,7 @@ namespace KmK_Movie_Ticket_Reservation
 
             conn = new MySqlConnection(connString);
             InitializeComponent();
+           
         }
 
         private void button1_Click(object sender, EventArgs e)

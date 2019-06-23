@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 namespace KmK_Movie_Ticket_Reservation
 {
-    public partial class ChooseMovie : Form
+    public partial class ChooseAuditorium : Form
     {
         private MySqlConnection conn;
         private string server;
@@ -19,10 +19,13 @@ namespace KmK_Movie_Ticket_Reservation
         private string password;
         private string user_name;
         private string movie_name;
-
-        public ChooseMovie(string a)
+        private string start_time;
+        private string auditorium_name;
+        public ChooseAuditorium(string a, string b, string c)
         {
             user_name = a;
+            movie_name = b;
+            start_time = c;
             server = "localhost";
             database = "kmk_movie";
             uid = "root";
@@ -34,19 +37,11 @@ namespace KmK_Movie_Ticket_Reservation
             conn = new MySqlConnection(connString);
 
             InitializeComponent();
-            Fill_Combo("screenings", "movie_name", comboBox1);           
+            Fill_Combo("screenings", "auditorium_name", comboBox1);
         }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            LogIn logIn = new LogIn();
-            logIn.ShowDialog();
-            this.Close();
-        }
-
         public void Fill_Combo(string table_name, string data_name, ComboBox comboBox)
         {
-            string query = $"SELECT DISTINCT movie_name FROM {table_name}";
+            string query = $"SELECT * FROM {table_name} WHERE movie_name = '{movie_name}' AND start_time = '{start_time}';";
             try
             {
                 if (OpenConnection())
@@ -55,7 +50,7 @@ namespace KmK_Movie_Ticket_Reservation
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        String data = reader.GetString(0);
+                        String data = reader.GetString(data_name);
                         comboBox.Items.Add(data);
                     }
                     conn.Close();
@@ -95,12 +90,32 @@ namespace KmK_Movie_Ticket_Reservation
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button6_Click(object sender, EventArgs e)
         {
-           
-            movie_name = comboBox1.SelectedItem.ToString();
+            LogIn logIn = new LogIn();
+            logIn.ShowDialog();
+            this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ChooseMovie chooseMovie = new ChooseMovie(user_name);
+            chooseMovie.ShowDialog();
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
             ChooseTime chooseTime = new ChooseTime(user_name, movie_name);
             chooseTime.ShowDialog();
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            auditorium_name = comboBox1.SelectedItem.ToString();
+            ChooseSeats chooseSeats = new ChooseSeats(user_name, movie_name, start_time, auditorium_name);
+            chooseSeats.ShowDialog();
             this.Close();
         }
     }

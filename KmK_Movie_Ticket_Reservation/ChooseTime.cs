@@ -101,5 +101,20 @@ namespace KmK_Movie_Ticket_Reservation
             chooseMovie.ShowDialog();
             this.Close();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            start_time = comboBox1.SelectedItem.ToString();
+            ChooseAuditorium chooseAuditorium = new ChooseAuditorium(user_name, movie_name, start_time);
+            chooseAuditorium.ShowDialog();
+            this.Close();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            LogIn logIn = new LogIn();
+            logIn.ShowDialog();
+            this.Close();
+        }
     }
 }
