@@ -64,7 +64,7 @@ namespace KmK_Movie_Ticket_Reservation
 
         public bool Insert_Movie(string a)
         {
-            string query = $"INSERT INTO movies(id, name) values('','{a}');";
+            string query = $"INSERT INTO movies(id, name, amount) values('','{a}', '0');";
             try
             {
                 if (OpenConnection())

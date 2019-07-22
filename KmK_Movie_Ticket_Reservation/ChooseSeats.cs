@@ -44,8 +44,8 @@ namespace KmK_Movie_Ticket_Reservation
 
             InitializeComponent();
         }
+        String data;
 
-        
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -238,6 +238,39 @@ namespace KmK_Movie_Ticket_Reservation
             amount = textBox2.Text;
             if (Insert_Movie(movie_name, start_time, auditorium_name, seats, amount, user_name))
             {
+                String query1 = $"SELECT * FROM movies WHERE name = '{movie_name}'";
+                MySqlCommand mySqlCommand = new MySqlCommand(query1, conn);
+                MySqlDataReader reader = mySqlCommand.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    try
+                    {
+                        data = reader.GetString("amount");                       
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                }
+                reader.Close();
+                int amount_value = Convert.ToInt32(data);
+                int current_amount = Convert.ToInt32(amount);
+                amount_value = amount_value + current_amount;
+                //UPDATE `movies` SET `amount` = '48000' WHERE `movies`.`id` = 3;
+                String query2 = $"UPDATE movies SET amount = '{amount_value}' WHERE name = '{movie_name}'";
+                MySqlCommand mySqlCommand1 = new MySqlCommand(query2, conn);
+                try
+                {
+                    mySqlCommand1.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                
+                conn.Close();
                 MessageBox.Show($"Reservation okay");                
                 textBox1.Clear();
                 textBox2.Clear();
@@ -259,7 +292,9 @@ namespace KmK_Movie_Ticket_Reservation
                     try
                     {
                         cmd.ExecuteNonQuery();
+                        
                         return true;
+                        
                     }
                     catch (Exception ex)
                     {

@@ -35,8 +35,10 @@ namespace KmK_Movie_Ticket_Reservation
             if (OpenConnection())
             {
                 Show_Table();
+                Show_Chart();
             }
         }
+        DataTable dbdataset;
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -51,7 +53,7 @@ namespace KmK_Movie_Ticket_Reservation
             {
                 MySqlDataAdapter sda = new MySqlDataAdapter();
                 sda.SelectCommand = cmd;
-                DataTable dbdataset = new DataTable();
+                dbdataset = new DataTable();
                 sda.Fill(dbdataset);
                 BindingSource bs = new BindingSource();
                 bs.DataSource = dbdataset;
@@ -61,6 +63,26 @@ namespace KmK_Movie_Ticket_Reservation
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void Show_Chart()
+        {
+            String query = "SELECT * FROM movies";
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            MySqlDataReader mySqlDataReader;
+            try
+            {
+                mySqlDataReader = cmd.ExecuteReader();
+                while (mySqlDataReader.Read())
+                {
+                    this.chart1.Series["Movies"].Points.AddXY(mySqlDataReader.GetString("name"), mySqlDataReader.GetString("amount"));
+                }
+                conn.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -98,6 +120,46 @@ namespace KmK_Movie_Ticket_Reservation
             AdminPanel adminPanel = new AdminPanel();
             adminPanel.ShowDialog();
             this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DataView dataView = new DataView(dbdataset);
+            dataView.RowFilter = string.Format("movie_name LIKE '%{0}%'", textBox1.Text);
+            dataGridView1.DataSource = dataView;
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DataView dataView = new DataView(dbdataset);
+            dataView.RowFilter = string.Format("auditorium_name LIKE '%{0}%'", textBox1.Text);
+            dataGridView1.DataSource = dataView;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DataView dataView = new DataView(dbdataset);
+            dataView.RowFilter = string.Format("cashier_name LIKE '%{0}%'", textBox1.Text);
+            dataGridView1.DataSource = dataView;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            Show_Table();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DataView dataView = new DataView(dbdataset);
+            dataView.RowFilter = string.Format("start_time LIKE '%{0}%'", textBox1.Text);
+            dataGridView1.DataSource = dataView;
         }
     }
 }
