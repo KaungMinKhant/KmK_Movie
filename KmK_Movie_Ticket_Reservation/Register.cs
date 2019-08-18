@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -36,6 +37,18 @@ namespace KmK_Movie_Ticket_Reservation
 
             InitializeComponent();
         }
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         private void label3_Click(object sender, EventArgs e)
         {
@@ -58,47 +71,67 @@ namespace KmK_Movie_Ticket_Reservation
         {
 
         }
+        static string Encrypt(string value)
+        {
+            //Using MD5 to encrypt a string
+            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+            {
+                UTF8Encoding utf8 = new UTF8Encoding();
+                //Hash data
+                byte[] data = md5.ComputeHash(utf8.GetBytes(value));
+                return Convert.ToBase64String(data);
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             name = textBox1.Text;
             email = textBox2.Text;
-            if (textBox3.Text == textBox4.Text)
+            if (IsValidEmail(email))
             {
-                pass = textBox3.Text;
-                if (radioButton1.Checked)
+                if (textBox3.Text == textBox4.Text)
                 {
-                    employee_type = radioButton1.Text;
-                }
-                else if (radioButton2.Checked)
-                {
-                    employee_type = radioButton2.Text;
-                }
-
-                if (Register_user(name, email, pass, employee_type))
-                {                                      
-                    if (IsManager(name, pass))
+                    pass = Encrypt(textBox3.Text);
+                    if (radioButton1.Checked)
                     {
-                        AdminPanel adminPanel = new AdminPanel();
-                        adminPanel.ShowDialog();
-                        this.Close();
+                        employee_type = radioButton1.Text;
                     }
-                    else if (IsStaff(name, pass))
+                    else if (radioButton2.Checked)
                     {
-                        ChooseMovie chooseMovie = new ChooseMovie(name);
-                        chooseMovie.ShowDialog();
-                        this.Close();
-                    }                  
+                        employee_type = radioButton2.Text;
+                    }
+
+                    if (Register_user(name, email, pass, employee_type))
+                    {
+                        if (IsManager(name, pass))
+                        {
+                            AdminPanel adminPanel = new AdminPanel();
+                            adminPanel.ShowDialog();
+                            this.Close();
+                        }
+                        else if (IsStaff(name, pass))
+                        {
+                            ChooseMovie chooseMovie = new ChooseMovie(name);
+                            chooseMovie.ShowDialog();
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"{name} has not been created.");
+                    }
                 }
-                else
+                else if (textBox3.Text != textBox4.Text)
                 {
-                    MessageBox.Show($"{name} has not been created.");
+                    MessageBox.Show("Password Doesn't Match");
                 }
             }
-            else if (textBox3.Text != textBox4.Text)
+            else
             {
-                MessageBox.Show("Password Doesn't Match");
+                MessageBox.Show("Wrong Email Format");
             }
+                
             
 
         }

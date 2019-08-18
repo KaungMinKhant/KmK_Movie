@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace KmK_Movie_Ticket_Reservation
@@ -35,6 +38,34 @@ namespace KmK_Movie_Ticket_Reservation
             ChooseMovie chooseMovie = new ChooseMovie(label8.Text);
             chooseMovie.ShowDialog();
             this.Close();
+        }
+        private string deskTopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        // counter for number of snaps
+        private int snapCount = 0;
+
+        private void SaveControlImage(Control theControl)
+        {
+            snapCount++;
+
+            Bitmap controlBitMap = new Bitmap(theControl.Width, theControl.Height);
+            Graphics g = Graphics.FromImage(controlBitMap);
+            g.CopyFromScreen(PointToScreen(theControl.Location), new Point(0, 0), theControl.Size);
+
+            // example of saving to the desktop
+            controlBitMap.Save(deskTopPath + @"/snap_" + snapCount.ToString() + @".png", ImageFormat.Png);
+        }
+
+
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SaveControlImage(panel1);
         }
     }
 }
